@@ -21,34 +21,120 @@ var Disclaimer = React.createClass({
     }
 });
 
+var cols = [
+    {
+        key: 'name',
+        label: 'Name'
+    },
+    {
+        key: 'count',
+        label: 'Count'
+    }
+];
 
+var data = [
+    {
+        id: 1,
+        name: 'John',
+        count: 'Doe'
+    },
+    {
+        id: 2,
+        name: 'Clark',
+        count: 'Kent'
+    }
+];
 
-var Button = React.createClass({
+const Table = ReactBootstrap.Table;
+
+var Results = React.createClass({
+    getInitialState: function () {
+        return {
+            showResults: false
+        };
+    },
     render: function () {
-        return ( < span className = "buttonBeta" >
-            < button type = "submit"
+        return ( < div > {
+            this.state.showResults ? < ResultTable / > : null
+        } < /div>);
+    }
+});
+
+var ResultTable = React.createClass({
+    render: function () {
+        var headerComponents = this.generateHeaders(),
+            rowComponents = this.generateRows();
+        return ( < Table striped bordered condensed hover >
+            < thead > {
+                headerComponents
+            } < /thead>  < tbody > {
+            rowComponents
+        } < /tbody> < /Table >
+    );
+},
+generateHeaders: function () {
+    var cols = this.props.cols; // [{key, label}]
+
+    // generate our header (th) cell components
+    return cols.map(function (colData) {
+        return <th key = {
+            colData.key
+        } > {
+            colData.label
+        } < /th>;
+    });
+},
+
+generateRows: function () {
+    var cols = this.props.cols, // [{key, label}]
+        data = this.props.data;
+
+    return data.map(function (item) {
+        // handle the column data within each row
+        var cells = cols.map(function (colData) {
+
+            // colData.key might be "firstName"
+            return <td > {
+                item[colData.key]
+            } < /td>;
+        });
+        return <tr key = {
+            item.id
+        } > {
+            cells
+        } < /tr>;
+    });
+}
+});
+
+var FirstButton = React.createClass({
+    render: function () {
+        var Button = ReactBootstrap.Button;
+        return ( < span >
+            < Button type = "submit"
             name = "submit"
+            bsStyle = "primary"
             value = "1st"
             onClick = {
                 this.props.onClick
-            }
-            className = "btn btn-primary" > Take First Snapshot < /button>< /span > );
+            } > Take First Snapshot < /Button>< /span > );
     }
 });
 
 var RetakeButton = React.createClass({
     render: function () {
+        var Button = ReactBootstrap.Button;
         return ( < span >
-            < button type = "submit"
+            < Button type = "submit"
             name = "submit"
             value = "2nd"
             onClick = {
                 this.props.onClick
             }
-            className = "btn btn-primary"
+            bsStyle = "primary"
             disabled = {
                 !this.props.data
-            } > Take Second Snapshot < /button>< /span > );
+            } > Take Second Snapshot < /Button>< /span > );
     }
 });
 
@@ -119,7 +205,7 @@ var CommentForm = React.createClass({
                 this.handleKeyChange
             }
             /> </div >
-            < Button onClick = {
+            < FirstButton onClick = {
                 this.submit1
             }
             / > < RetakeButton onClick = {
@@ -188,3 +274,10 @@ var Form = React.createClass({
 });
 ReactDOM.render( < Disclaimer / > , document.getElementById('disc'));
 ReactDOM.render( < Form / > , document.getElementById('form'));
+ReactDOM.render( < Results cols = {
+            cols
+        }
+        data = {
+            data
+        }
+        / > , document.getElementById('results'));
