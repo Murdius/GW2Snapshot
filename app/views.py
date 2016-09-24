@@ -15,7 +15,7 @@ from sharedInventory import getSharedInventory
 from material import *
 from app import models
 from app import app
-from flask import Blueprint, render_template, request, make_response, flash, session
+from flask import Blueprint, render_template, request, make_response, flash, session, jsonify
 from tradingPost import *
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Pool
@@ -127,6 +127,78 @@ def take_second_snapshot():
     p.terminate()
     return resp
 
+@app.route('/walletresults', methods=['POST'])
+def take_wallet_snapshot():
+    api_key = request.cookies.get('key')
+    key = {'access_token' : api_key}
+    encoded_key = urllib.urlencode(key)
+    start_time = session['time']
+    minutes_elapsed = (time.time()-start_time)/60
+    old_wallet_json = session['wallet']
+    snapshot = models.Snapshot.query.filter_by(api_key=api_key).first_or_404()
+    old_materials_data = snapshot.materials
+    old_materials_json = json.loads(old_materials_data)
+    print "Loaded old snapshot"
+    new_wallet_json = getWallet(API2_URL, encoded_key)
+    print "Retrieved new data"
+    wallet_delta_list = compare_wallet(old_wallet_json, new_wallet_json)
+    print "Compared data"
+    wallet_delta_list = remove_zero_value(wallet_delta_list)
+    print "Removed zero count"
+    p = ThreadPool(processes=20)
+    p.map(add_name_to_currency, wallet_delta_list)
+    p.close()
+    p.terminate()
+    return jsonify(list=wallet_delta_list)
 
-
-
+@app.route('/itemresults', methods=['POST'])
+def take_item_snapshot():
+    api_key = request.cookies.get('key')
+    key = {'access_token' : api_key}
+    encoded_key = urllib.urlencode(key)
+    start_time = session['time']
+    minutes_elapsed = (time.time()-start_time)/60
+    old_wallet_json = session['wallet']
+    old_bank_json = session['bank']
+    old_shared_json = session['shared']
+    snapshot = models.Snapshot.query.filter_by(api_key=api_key).first_or_404()
+    old_inventory_data = snapshot.inventory
+    old_materials_data = snapshot.materials
+    old_inventory_json = json.loads(old_inventory_data)
+    old_materials_json = json.loads(old_materials_data)
+    print "Loaded old snapshot"
+    new_inventory_json = getAllInventory(API2_URL, encoded_key)
+    new_shared_json = getSharedInventory(API2_URL, encoded_key)
+    new_bank_json = get_bank(API2_URL, encoded_key)
+    new_materials_json = getMaterials2(API2_URL, encoded_key)
+    print "Retrieved new data"
+    inventory_delta_list = compare_inventory(old_inventory_json, new_inventory_json)
+    shared_delta_list = compare_inventory(old_shared_json, new_shared_json)
+    bank_delta_list = compare_inventory(old_bank_json, new_bank_json)
+    materials_delta_list = compare_inventory(old_materials_json, new_materials_json)
+    print "Compared data"
+    inventory_delta_list = remove_zero_count(inventory_delta_list)
+    shared_delta_list = remove_zero_count(shared_delta_list)
+    bank_delta_list = remove_zero_count(bank_delta_list)
+    materials_delta_list = remove_zero_count(materials_delta_list)
+    print "Removed zero count"
+    condensed_list = inventory_delta_list+shared_delta_list+bank_delta_list+materials_delta_list
+    p = ThreadPool(processes=20)
+    p.map(add_name_to_item, condensed_list)
+    print "Item name retrieved"
+    condensed_list2 = copy.deepcopy(condensed_list)
+    condensed_list2 = compress_list(condensed_list2)
+    condensed_list2 = remove_zero_count(condensed_list2)
+    print "Removed zero count from condensed list"
+    total_value = 0
+    p.map(add_sell_price_to_item, condensed_list2)
+    print "Got sell price"
+    for item in condensed_list2:
+        total_value += item['value']
+    print "Got total value"
+    zero_value_items = [zero_value_item for zero_value_item in condensed_list2 if zero_value_item['value'] == 0]
+    print "Got zero_value_items"
+    packaged_list = {'condensed_list2' : condensed_list2, 'zero_value_items' : zero_value_items, 'total_value' : total_value}
+    p.close()
+    p.terminate()
+    return jsonify(data=packaged_list)
