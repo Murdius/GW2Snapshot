@@ -95,7 +95,7 @@ def add_name_to_item(item):
     else:
         name = itemIDToName(API2_URL, item['id'])
         db_item = models.Item(item['id'], name)
-        models.db.session.add(db_item)
+        models.db.session.merge(db_item)
         models.db.session.commit()
         item['name'] = name
     models.db.session.close()

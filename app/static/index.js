@@ -1,123 +1,140 @@
 function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
 }
 
 function getCookie(name) {
-    var regexp = new RegExp("(?:^" + name + "|;\s*" + name + ")=(.*?)(?:;|$)", "g");
-    var result = regexp.exec(document.cookie);
-    return (result === null)
-        ? null
-        : result[1];
+  var regexp = new RegExp("(?:^" + name + "|;\s*" + name + ")=(.*?)(?:;|$)", "g");
+  var result = regexp.exec(document.cookie);
+  return (result === null)
+  ? null
+  : result[1];
 }
 
 var Disclaimer = React.createClass({
-    render: function() {
-        return (
-          <div className = "disclaimer">
-            <p> Disclaimer : Each snapshot is inaccurate up to 5 mins.Do nothing for 5 mins before you take the first snapshot.Do nothing for 5 mins after your session and then take snapshot.Try clearing cookies if something breaks. </p>
-          </div>);
-    }
+  render: function() {
+    return (
+      <div className = "disclaimer">
+        <p> Disclaimer : Each snapshot is inaccurate up to 5 mins.Do nothing for 5 mins before you take the first snapshot.Do nothing for 5 mins after your session and then take snapshot.Try clearing cookies if something breaks. </p>
+      </div>
+    );
+  }
 });
 
 var item_cols = [
-    {
-        key: 'name',
-        label: 'Name'
-    }, {
-        key: 'count',
-        label: 'Count'
-    }, {
-        key: 'value',
-        label: 'Value'
-    }
+  {
+    key: 'name',
+    label: 'Name'
+  }, {
+    key: 'count',
+    label: 'Count'
+  }, {
+    key: 'value',
+    label: 'Value'
+  }
 ];
-var wallet_cols = [
-    {
-        key: 'name',
-        label: 'Name'
-    }, {
-        key: 'value',
-        label: 'Value'
 
-    }
+var wallet_cols = [
+  {
+    key: 'name',
+    label: 'Name'
+  }, {
+    key: 'value',
+    label: 'Value'
+  }
 ];
 
 var wallet_data_sample = [
-    {
-        "id": 1,
-        "name": "Coin",
-        "value": -305
-    }
+  {
+    "id": 1,
+    "name": "Coin",
+    "value": -305
+  }
 ];
 
 var item_data_sample = [
-    {
-        "id": 1,
-        "name": "Coin",
-        "count": 6,
-        "value": -306
-    }
+  {
+    "id": 1,
+    "name": "Coin",
+    "count": 6,
+    "value": -306
+  }
 ];
 
 const Table = ReactBootstrap.Table;
 const Button = ReactBootstrap.Button;
 
 var Results = React.createClass({
-    render: function() {
-        return (
+  render: function() {
+    return (
+      <div>
+        {this.props.data.length ?
           <div>
-            {this.props.data.length ? <div>
-              <p> {this.props.caption} </p>
-              <ResultsTable
-                cols = {this.props.cols}
-                data = {this.props.data}
-              /> </div>
-            : null}
+            <p>
+              {this.props.caption}
+            </p>
+            <ResultsTable
+              cols = {this.props.cols}
+              data = {this.props.data}/>
           </div>
-        );
-    }
+          : null
+        }
+      </div>
+    );
+  }
 });
 
 var ResultsTable = React.createClass({
 
-    render: function() {
-        var headerComponents = this.generateHeaders(),
-            rowComponents = this.generateRows();
+  render: function() {
+    var headerComponents = this.generateHeaders(),
+    rowComponents = this.generateRows();
 
-        return (
-            <Table striped bordered condensed hover>
-              <thead> <tr>{headerComponents} </tr></thead>
-              <tbody> {rowComponents} </tbody>
-            </Table>
-        );
-    },
+    return (
+      <Table striped bordered condensed hover>
+        <thead>
+          <tr>
+            {headerComponents}
+          </tr>
+        </thead>
+        <tbody>
+          {rowComponents}
+        </tbody>
+      </Table>
+    )
+  },
 
-    generateHeaders: function() {
-        var cols = this.props.cols;  // [{key, label}]
+  generateHeaders: function() {
+    var cols = this.props.cols;  // [{key, label}]
 
-        // generate our header (th) cell components
-        return cols.map(function(colData) {
-            return <th key={colData.key}> {colData.label} </th>;
-        });
-    },
+    // generate our header (th) cell components
+    return cols.map(function(colData) {
+      return <th key={colData.key}>
+        {colData.label}
+      </th>;
+    });
+  },
 
-    generateRows: function() {
-        var cols = this.props.cols,  // [{key, label}]
-            data = this.props.data;
+  generateRows: function() {
+    var cols = this.props.cols,  // [{key, label}]
+    data = this.props.data;
 
-        return data.map(function(item) {
-            // handle the column data within each row
-            var cells = cols.map(function(colData) {
+    return data.map(function(item) {
+      // handle the column data within each row
+      var cells = cols.map(function(colData) {
 
-                // colData.key might be "firstName"
-                return <td key = {item[colData.key]}> {item[colData.key]} </td>;
-            });
-            return <tr key={item.id}> {cells} </tr>;
-        });
-    }
+        // colData.key might be "firstName"
+        return <td key = {item[colData.key]}>
+          {item[colData.key]}
+        </td>;
+      });
+      return <tr key={item.id}>
+        {cells}
+      </tr>;
+    });
+  }
 });
 
 var FirstButton = React.createClass({
@@ -130,11 +147,12 @@ var FirstButton = React.createClass({
           bsStyle = "primary"
           value = "1st"
           onClick = {this.props.onClick}
-        >
+          >
           Take First Snapshot
         </Button>
-      </span>);
-    }
+      </span>
+    );
+  }
 });
 
 var RetakeButton = React.createClass({
@@ -147,13 +165,12 @@ var RetakeButton = React.createClass({
           value = "2nd"
           onClick = {this.props.onClick}
           bsStyle = "primary"
-          //disabled = {
-          //    !this.props.data
-          //}
-        >
+          //disabled = {!this.props.data}
+          >
           Take Second Snapshot
         </Button>
-      </span>);
+      </span>
+    );
   }
 });
 
@@ -178,9 +195,9 @@ var CommentForm = React.createClass({
     }
     if (this.state.button === '1') {
       this.props.onCommentSubmit({key: key});
-      } else {
-        this.props.onCommentSubmit2({key: key});
-      }
+    } else {
+      this.props.onCommentSubmit2({key: key});
+    }
     document.cookie = "key=" + this.state.key
     this.setState({submitted: 'something'});
   },
@@ -200,7 +217,7 @@ var CommentForm = React.createClass({
       <form
         className = "commentForm"
         onSubmit = {this.handleSubmit}
-      >
+        >
         <div className = "form-group">
           <input
             type = "text"
@@ -209,15 +226,16 @@ var CommentForm = React.createClass({
             id = "apiKey"
             value = {this.state.key}
             onChange = {this.handleKeyChange}
-          />
+            />
         </div>
-
-
         <FirstButton onClick = {this.submit1}/>
-        <RetakeButton onClick = {this.submit2} data = {this.state.submitted}/>
+        <RetakeButton
+          onClick = {this.submit2}
+          data = {this.state.submitted}/>
       </form>
     );
-}});
+  }
+});
 
 var Form = React.createClass({
   handleKeySubmit1 : function(key) {
@@ -233,7 +251,7 @@ var Form = React.createClass({
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
-      });
+    });
   },
   handleKeySubmit2 : function(key) {
     $.ajax({
@@ -276,26 +294,26 @@ var Form = React.createClass({
         <CommentForm
           onCommentSubmit = {this.handleKeySubmit1}
           onCommentSubmit2 = {this.handleKeySubmit2}
-        />
-        <p> {this.state.data} </p>
+          />
+        <p>
+          {this.state.data}
+        </p>
 
         <Results
           cols = {wallet_cols}
           data = {this.state.wallet_data}
-          caption = "Wallet"
-        />
+          caption = "Wallet"/>
         <Results
           cols = {item_cols}
           data = {this.state.item_data}
-          caption = "All items"
-        />
+          caption = "All items"/>
         <Results
           cols = {item_cols}
           data = {this.state.zero_data}
-          caption = "Zero value items"
-        />
+          caption = "Zero value items"/>
         {this.state.total_value ?
-          <p> Total value if sold: {this.state.total_value} </p>:
+          <p> Total value if sold: {this.state.total_value} </p>
+          :
           null
         }
       </div>
@@ -305,10 +323,10 @@ var Form = React.createClass({
 
 ReactDOM.render(
   <Disclaimer/>,
-document.getElementById('disclaimer')
+  document.getElementById('disclaimer')
 );
 
 ReactDOM.render(
   <Form/>,
-document.getElementById('form')
+  document.getElementById('form')
 );
