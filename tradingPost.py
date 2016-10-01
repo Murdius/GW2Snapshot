@@ -20,4 +20,4 @@ def getSellPrice(id):
 
 def add_sell_price_to_item(item):
     value = getSellPrice(item['id'])
-    item['value'] = item['count'] * value
+    item['copper'] = item['count'] * value

@@ -121,18 +121,21 @@ def take_item_snapshot():
     condensed_list = inventory_delta_list+shared_delta_list+bank_delta_list+materials_delta_list
     p = ThreadPool(processes=10)
     p.map(add_name_to_item, condensed_list)
+    p.close()
+    p.terminate()
     print "Item name retrieved"
     condensed_list2 = copy.deepcopy(condensed_list)
     condensed_list2 = compress_list(condensed_list2)
     condensed_list2 = remove_zero_count(condensed_list2)
     print "Removed zero count from condensed list"
     total_value = 0
+    p = ThreadPool(processes=(len(condensed_list2)/2)+1)
     p.map(add_sell_price_to_item, condensed_list2)
     print "Got sell price"
     for item in condensed_list2:
-        total_value += item['value']
+        total_value += item['copper']
     print "Got total value"
-    zero_value_items = [zero_value_item for zero_value_item in condensed_list2 if zero_value_item['value'] == 0]
+    zero_value_items = [zero_value_item for zero_value_item in condensed_list2 if zero_value_item['copper'] == 0]
     print "Got zero_value_items"
     packaged_list = {'condensed_list2' : condensed_list2, 'zero_value_items' : zero_value_items, 'total_value' : total_value}
     p.close()
