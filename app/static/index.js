@@ -132,7 +132,7 @@ generateRows: function () {
     var cells = self.props.cols.map(function (colData) {
       if (colData.key === "name"){
         // colData.key might be "firstName"
-        return <td className="col-md-6 col-xs-6" >
+        return <td className="col-md-6 col-xs-6">
           {
             item[colData.key]
           }
@@ -299,7 +299,7 @@ var Form = React.createClass({
   },
   handleKeySubmit2: function (key) {
     $.ajax({
-      url: "/walletresults",
+      url: "/wallet",
       cache: false,
       type: 'POST',
       dataType: 'html',
@@ -315,7 +315,7 @@ var Form = React.createClass({
       }.bind(this)
     });
     $.ajax({
-      url: "/itemresults",
+      url: "/item",
       cache: false,
       type: 'POST',
       dataType: 'html',
@@ -339,6 +339,9 @@ var Form = React.createClass({
             } else {
               console.log('Network response was not ok.');
               item['value'] = 0;
+              self.setState({
+                item_data: parsed.data.condensed_list2
+              });
             }
           })
           .catch(function(error) {
