@@ -1,14 +1,13 @@
 {% extends "layout.html" %} {% block content %}
-<script type="text/babel" src="{{url_for('static', filename='index.js')}}"></script>
 <!-- Page Content -->
 <div class="container-fluid">
     <div class="row">
         <div id="disclaimer"></div>
-        <div class="text-center"> {% if error %}
-            <p class=error><strong>Error:</strong> {{ error }}</p> {% endif %}
+        <div class="text-center">
             <div id="form"></div>
         </div>
     </div>
     <!-- /.row -->
 </div>
+<script type="text/javascript" src="{{url_for('static', filename='bundle.js')}}"></script>
 <!-- /.container -->{% endblock %}
