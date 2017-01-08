@@ -15,14 +15,18 @@
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
+    "react-redux": "^5.0.1",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.4",
+    "redux-thunk": "^2.1.0",
     "webpack": "^1.13.3"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p --config ./webpack.config.js",
-    "postinstall": "webpack -p --config ./webpack.config.js"
-
+    "build": "webpack",
+    "postinstall": "webpack -p --config ./webpack.config.js",
+    "lint": "eslint . --ext .js --ext .jsx"
   },
   "repository": {
     "type": "git",

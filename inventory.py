@@ -39,6 +39,7 @@ def getInventory(API2_URL, encoded_key, character):
 
 def getAllInventory(API2_URL, encoded_key):
     full_url = API2_URL + '/characters?page=0&&' + encoded_key
+    print full_url;
     response = urllib2.urlopen(full_url)
     the_page = response.read()
     characters_data = json.loads(the_page)
@@ -46,9 +47,10 @@ def getAllInventory(API2_URL, encoded_key):
     filtered = []
     for character in characters_data:
         for bags in character['bags']:
-            for item in bags['inventory']:
-                if item != None:
-                    filtered.append(item)
+            if bags != None:
+                for item in bags['inventory']:
+                    if item != None:
+                        filtered.append(item)
                     
     #Filters out everything except 'count' and 'id'
     for attribute in filtered:

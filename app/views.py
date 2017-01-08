@@ -29,7 +29,7 @@ def index():
 
 class Snapshot(Resource):
     def post(self):
-        api_key = request.form['key']
+        api_key = request.cookies.get('key')
         key = {'access_token': api_key}
         encoded_key = urllib.urlencode(key)
         wallet_json = getWallet(API2_URL, encoded_key)
@@ -123,9 +123,9 @@ class Item(Resource):
         materials_delta_list = remove_zero_count(materials_delta_list)
         print "Removed zero count"
         condensed_list = inventory_delta_list + shared_delta_list + bank_delta_list + materials_delta_list
-        p.map(add_name_to_item, condensed_list)
-        p.close()
-        p.join()
+        #p.map(add_name_to_item, condensed_list)
+        #p.close()
+        #p.join()
         print "Item name retrieved"
         condensed_list2 = copy.deepcopy(condensed_list)
         condensed_list2 = compress_list(condensed_list2)
