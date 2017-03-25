@@ -52,24 +52,9 @@ export function takeSnapshot(apiKey) {
 export function retakeSnapshot(apiKey) {
     document.cookie = "key=" + apiKey
     return (dispatch, getState) => {
-        return dispatch(fetchItemData(apiKey)).then(() => {
-            return dispatch(fetchWalletData(apiKey))
-        })
+        dispatch(fetchWalletData(apiKey))
+        dispatch(fetchItemData(apiKey))
     }
-}
-
-export function getItemPriceFromID(id) {
-    fetch('https://api.guildwars2.com/v2/commerce/prices/' + id).then(function(response) {
-        if (response.ok) {
-            response.json().then(function(jsonData) {
-                console.log(jsonData)
-            });
-        } else {
-            console.log('Network response was not ok.');
-        }
-    }).catch(function(error) {
-        console.log('There has been a problem with your fetch operation: ' + error.message);
-    });
 }
 
 export function getItemNameFromID(id) {

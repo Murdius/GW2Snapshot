@@ -1,11 +1,11 @@
-import urllib
-import urllib2
 import json
+import urllib2
 
-from listManipulation import compress_list, remove_zero_count
-from pprint import pprint
+from Constants import API2_URL
+from listManipulation import compress_list
 
-def get_bank(API2_URL, encoded_key):
+
+def get_bank(encoded_key):
     scope_url = '/account/bank'
     bank_data = []
     full_url = API2_URL + scope_url + '?' + encoded_key

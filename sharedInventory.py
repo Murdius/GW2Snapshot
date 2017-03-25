@@ -1,10 +1,10 @@
-import urllib
-import urllib2
 import json
+import urllib2
 
-from pprint import pprint
+from Constants import API2_URL
 
-def getSharedInventory(API2_URL, encoded_key):
+
+def get_shared_inventory(encoded_key):
     full_url = API2_URL + '/account/inventory?' + encoded_key
     response = urllib2.urlopen(full_url)
     the_page = response.read()

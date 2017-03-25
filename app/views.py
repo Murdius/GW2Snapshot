@@ -1,24 +1,17 @@
-import urllib
-import urllib2
-import json
-import sys
-import filewriter
-import copy
-
-from pprint import pprint
-from listManipulation import *
-from wallet import *
-from inventory import *
-from bank import get_bank
-from sharedInventory import getSharedInventory 
-from material import *
-from app import models, app, api
-from flask import Blueprint, render_template, request, make_response, flash, session, jsonify
-from tradingPost import *
 from multiprocessing.pool import ThreadPool
-from flask_restful import Resource, Api
+from pprint import pprint
 
-API2_URL = 'https://api.guildwars2.com/v2'
+from flask import render_template, request, session, jsonify
+from flask_restful import Resource
+
+from app import app, api
+from bank import get_bank
+from inventory import *
+from listManipulation import *
+from material import *
+from sharedInventory import get_shared_inventory
+from tradingPost import *
+from wallet import *
 
 
 @app.route('/')
@@ -32,16 +25,16 @@ class Snapshot(Resource):
         api_key = request.cookies.get('key')
         key = {'access_token': api_key}
         encoded_key = urllib.urlencode(key)
-        wallet_json = getWallet(API2_URL, encoded_key)
+        wallet_json = get_wallet(encoded_key)
         if wallet_json == "Access denied!":
             return 'Access denied!'
-        inventory_json = getAllInventory(API2_URL, encoded_key)
+        inventory_json = get_all_inventory(encoded_key)
         print "Retrieved inventory data"
-        shared_json = getSharedInventory(API2_URL, encoded_key)
+        shared_json = get_shared_inventory(encoded_key)
         print "Retrieved shared data"
-        bank_json = get_bank(API2_URL, encoded_key)
+        bank_json = get_bank(encoded_key)
         print "Retrieved bank data"
-        materials_json = getMaterials2(API2_URL, encoded_key)
+        materials_json = get_materials(encoded_key)
         print "Retrieved materials data"
         exists = models.db.session.query(models.Snapshot.api_key).filter_by(
             api_key=api_key).scalar() is not None
@@ -73,7 +66,7 @@ class Wallet(Resource):
         snapshot = models.Snapshot.query.filter_by(api_key=api_key).first_or_404()
         old_wallet_json = snapshot.wallet
         print "Loaded old snapshot"
-        new_wallet_json = getWallet(API2_URL, encoded_key)
+        new_wallet_json = get_wallet(encoded_key)
         print "Retrieved new data"
         wallet_delta_list = compare_wallet(old_wallet_json, new_wallet_json)
         print "Compared data"
@@ -97,10 +90,10 @@ class Item(Resource):
         key = {'access_token': api_key}
         encoded_key = urllib.urlencode(key)
         p = ThreadPool(processes=5)
-        new_inventory_json_response = p.apply_async(getAllInventory, (API2_URL, encoded_key))
-        new_shared_json_response = p.apply_async(getSharedInventory, (API2_URL, encoded_key))
-        new_bank_json_response = p.apply_async(get_bank, (API2_URL, encoded_key))
-        new_materials_json_response = p.apply_async(getMaterials2, (API2_URL, encoded_key))
+        new_inventory_json_response = p.apply_async(get_all_inventory, [encoded_key])
+        new_shared_json_response = p.apply_async(get_shared_inventory, [encoded_key])
+        new_bank_json_response = p.apply_async(get_bank, [encoded_key])
+        new_materials_json_response = p.apply_async(get_materials, [encoded_key])
         snapshot = models.Snapshot.query.filter_by(api_key=api_key).first_or_404()
         old_inventory_json = snapshot.inventory
         old_materials_json = snapshot.materials
@@ -123,9 +116,11 @@ class Item(Resource):
         materials_delta_list = remove_zero_count(materials_delta_list)
         print "Removed zero count"
         condensed_list = inventory_delta_list + shared_delta_list + bank_delta_list + materials_delta_list
-        #p.map(add_name_to_item, condensed_list)
-        #p.close()
-        #p.join()
+        p = ThreadPool(processes=20)
+        p.map(add_name_to_item, condensed_list)
+        p.map(add_unit_price_to_item, condensed_list)
+        p.close()
+        p.terminate()
         print "Item name retrieved"
         condensed_list2 = copy.deepcopy(condensed_list)
         condensed_list2 = compress_list(condensed_list2)
