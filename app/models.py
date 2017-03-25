@@ -1,5 +1,7 @@
-from app import db
 from sqlalchemy.dialects.postgresql import JSON
+
+from app import db
+
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,6 +13,7 @@ class Item(db.Model):
 
     def __repr__(self):
         return '<Name %r>' % self.name
+
 
 class Currency(db.Model):
     id = db.Column(db.Integer, primary_key=True)

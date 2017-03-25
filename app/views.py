@@ -55,6 +55,7 @@ class Snapshot(Resource):
         session['wallet'] = wallet_json
         return api_key
 
+
 api.add_resource(Snapshot, '/snapshot')
 
 
@@ -82,7 +83,9 @@ class Wallet(Resource):
         models.db.session.close()
         return jsonify(list=wallet_delta_list)
 
+
 api.add_resource(Wallet, '/wallet')
+
 
 class Item(Resource):
     def post(self):
@@ -131,5 +134,6 @@ class Item(Resource):
         p.terminate()
         models.db.session.close()
         return jsonify(data=packaged_list)
+
 
 api.add_resource(Item, '/item')

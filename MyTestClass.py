@@ -30,7 +30,8 @@ class MyTestClass(unittest.TestCase):
     def test_equal_numbers(self):
         name = wallet_id_to_name(1);
         print(name)
-        self.assertEqual(name,"Coin")
+        self.assertEqual(name, "Coin")
+
 
 # runs the unit tests in the module
 if __name__ == '__main__':

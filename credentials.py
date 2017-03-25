@@ -1,2 +1,2 @@
 CHARACTER = ''
-key = {'access_token' : ''}
+key = {'access_token': ''}

@@ -25,7 +25,7 @@ def get_wallet(encoded_key):
     except urllib2.URLError, err:
         print "Some other error happened:", err.reason
         return "Some other error happened: "
-    
+
 
 def wallet_id_to_name(wallet_id):
     scope_url = '/currencies/'
