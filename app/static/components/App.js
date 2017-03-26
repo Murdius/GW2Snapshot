@@ -5,6 +5,7 @@ import InputFieldContainer from '../containers/InputFieldContainer.js'
 import RetakeSnapshot from '../containers/RetakeSnapshot.js'
 import ButtonGroup from './buttonGroup.js'
 import VisibleResults from '../containers/VisibleResults.js'
+import StatusContainer from '../containers/StatusContainer.jsx'
 
 const App = () => (
     <div>
@@ -13,6 +14,7 @@ const App = () => (
             <InputFieldContainer/>
             <ButtonGroup/>
             <Filter/>
+            <StatusContainer/>
             <VisibleResults/>
         </div>
     </div>
