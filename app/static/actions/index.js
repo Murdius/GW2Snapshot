@@ -15,8 +15,8 @@ export const changeStatus = (status) => ({type: 'CHANGE_STATUS', status})
 export function fetchWalletData(apiKey) {
     return function(dispatch) {
         dispatch(requestWalletData(apiKey))
-        return fetch('/wallet', {
-            method: "POST",
+        return fetch('/wallet/' + apiKey, {
+            method: "GET",
             credentials: 'include'
         }).then(response => response.json()).then(json => dispatch(receiveWalletData(apiKey, json)))
     }
@@ -25,8 +25,8 @@ export function fetchWalletData(apiKey) {
 export function fetchItemData(apiKey) {
     return function(dispatch) {
         dispatch(requestItemData(apiKey))
-        return fetch('/item', {
-            method: "POST",
+        return fetch('/item/' + apiKey, {
+            method: "GET",
             credentials: 'include'
         }).then(response => response.json()).then(json => dispatch(receiveItemData(apiKey, json)))
     }
@@ -52,8 +52,9 @@ export function takeSnapshot(apiKey) {
 export function retakeSnapshot(apiKey) {
     document.cookie = "key=" + apiKey
     return (dispatch, getState) => {
+        dispatch(changeStatus("TAKING SECOND"))
         dispatch(fetchWalletData(apiKey))
-        dispatch(fetchItemData(apiKey))
+        dispatch(fetchItemData(apiKey)).then(dispatch(changeStatus("TOOK SECOND")))
     }
 }
 

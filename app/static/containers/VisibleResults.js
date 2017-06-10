@@ -14,8 +14,8 @@ const getVisibleResults = (results, filter) => {
 }
 
 var getItemValue = function(itemData) {
-    if (itemData.items.data) {
-        itemData.items.data.condensed_list2.forEach(function(item) {
+    if (itemData.items.item_data) {
+        itemData.items.item_data.forEach(function(item) {
             item['value'] = item['unit_price'] * item['count'];
         });
     }
@@ -24,8 +24,8 @@ var getItemValue = function(itemData) {
 
 var getTotalItemValue = function(itemData) {
     var totalItemValue = 0;
-    if (itemData.items.data) {
-        itemData.items.data.condensed_list2.forEach(function(item) {
+    if (itemData.items.item_data) {
+        itemData.items.item_data.forEach(function(item) {
             totalItemValue += item['value'];
         });
     }

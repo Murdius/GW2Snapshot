@@ -61,4 +61,4 @@ class ItemRest(Resource):
         return jsonify(item_data=condensed_list2)
 
 
-api.add_resource(ItemRest, '/item2/<string:api_key>')
+api.add_resource(ItemRest, '/item/<string:api_key>')

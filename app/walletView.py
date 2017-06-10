@@ -34,4 +34,4 @@ class WalletRest(Resource):
         return jsonify(wallet_data=wallet_delta_list)
 
 
-api.add_resource(WalletRest, '/wallet2/<string:api_key>')
+api.add_resource(WalletRest, '/wallet/<string:api_key>')

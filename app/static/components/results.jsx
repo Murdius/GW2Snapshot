@@ -17,17 +17,17 @@ var item_cols = [
 const Results = ({walletData, itemData, results, totalItemValue}) => {
     return (
         <div>
-            {walletData.items.list
+            {walletData.items.wallet_data
                 ? <div>
                         <p>Currency gained/lost</p>
-                        <ResultsTable cols={item_cols} data={walletData.items.list}/>
+                        <ResultsTable cols={item_cols} data={walletData.items.wallet_data}/>
                     </div>
                 : null
 }
-            {itemData.items.data
+            {itemData.items.item_data
                 ? <div>
                         <p>Items gained/lost</p>
-                        <ResultsTable cols={item_cols} data={itemData.items.data.condensed_list2}/></div>
+                        <ResultsTable cols={item_cols} data={itemData.items.item_data}/></div>
                 : null}
             <p>Total Item Value: {totalItemValue}</p>
         </div>
