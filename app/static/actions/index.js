@@ -43,6 +43,7 @@ export function fetchSnapshot(apiKey) {
 }
 
 export function takeSnapshot(apiKey) {
+    localStorage.setItem('apiKey', apiKey);
     document.cookie = "key=" + apiKey
     return (dispatch, getState) => {
         return dispatch(fetchSnapshot(apiKey))

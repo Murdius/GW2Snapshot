@@ -21,7 +21,21 @@ var getItemValue = function(itemData) {
     }
     return itemData;
 }
+var formatValue = function(number) {
 
+    var string = number.toString();
+
+    if (string.length > 5) {
+        var index = string.length - 4;
+        string = string.slice(0, index) + 'g ' + string.slice(index);
+    }
+    if (string.length > 3) {
+        var index = string.length - 2;
+        string = string.slice(0, index) + 's ' + string.slice(index);
+    }
+    string = string + 'c';
+    return string;
+}
 var getTotalItemValue = function(itemData) {
     var totalItemValue = 0;
     if (itemData.items.item_data) {
@@ -29,7 +43,7 @@ var getTotalItemValue = function(itemData) {
             totalItemValue += item['value'];
         });
     }
-    return totalItemValue
+    return formatValue(totalItemValue)
 }
 const mapStateToProps = (state) => ({
     results: getVisibleResults(state.results, state.visibilityFilter),

@@ -5,7 +5,7 @@ const InputField = ({onChange, apiKey}) => (
         <label className="control-label">
             API Key
         </label>
-        <input type="text" autocomplete="on" className="form-control" name="apiKey" id="apiKey" value={apiKey} onChange= {(e)=>onChange(e.target.value)}/>
+        <input type="text" className="form-control" name="apiKey" id="apiKey" value={apiKey} onChange= {(e)=>onChange(e.target.value)}/>
     </div>
 )
 

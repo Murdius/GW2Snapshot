@@ -50,13 +50,10 @@ class ResultsTable extends React.Component {
                 if (colData.key === "name") {
                     // colData.key might be "firstName"
                     return <td className="col-md-6 col-xs-6">
-
-                        {item[colData.key]
-}
+                        {item[colData.key]}
                     </td>
                 } else {
                     return <td className="col-md-3 col-xs-3">
-
                         {item[colData.key]}
                     </td>
                 }
