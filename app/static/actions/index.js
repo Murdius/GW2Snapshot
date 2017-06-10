@@ -51,7 +51,6 @@ export function takeSnapshot(apiKey) {
 }
 
 export function retakeSnapshot(apiKey) {
-    document.cookie = "key=" + apiKey
     return (dispatch, getState) => {
         dispatch(changeStatus("TAKING SECOND"))
         dispatch(fetchWalletData(apiKey))
