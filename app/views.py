@@ -87,7 +87,6 @@ class Wallet(Resource):
 
 api.add_resource(Wallet, '/wallet')
 
-
 class Item(Resource):
     def post(self):
         api_key = request.cookies.get('key')
@@ -135,6 +134,5 @@ class Item(Resource):
         p.terminate()
         models.db.session.close()
         return jsonify(data=packaged_list)
-
 
 api.add_resource(Item, '/item')
