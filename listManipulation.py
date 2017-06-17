@@ -45,6 +45,27 @@ def compress_list(list1):
     return compressed_list
 
 
+def combine_list(list1, list2):
+    combined_list = copy.deepcopy(list2)
+    for item1 in list1:
+        flag = 0
+        for item2 in combined_list:
+            if item2['id'] == item1['id']:
+                item2['count'] = item2['count'] + item1['count']
+                flag = 1
+                break
+        if flag == 0:
+            combined_list.append({'id': item1['id'], 'count': item1['count']})
+    return combined_list
+
+
+def filter_list(unfiltered_list):
+    filtered_list = []
+    for item in unfiltered_list:
+        filtered_list.append({'id': item['id'], 'count': item['count']})
+    return filtered_list
+
+
 # Remove all items with count: 0 in list
 def remove_zero_count(list1):
     non_zero_list = []
