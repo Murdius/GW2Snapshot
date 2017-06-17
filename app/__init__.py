@@ -9,6 +9,7 @@ app.secret_key = '\xaf\xa6Q~\xd3\x88\xaa?k\xb5\xdd\xd0\x0c\x05\x93\x04\x16~\t\x8
 api = Api(app)
 
 #app.config.from_pyfile('config.py')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
