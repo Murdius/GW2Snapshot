@@ -25,11 +25,11 @@ var formatValue = function(number) {
 
     var string = number.toString();
 
-    if (string.length > 5) {
+    if (string.length > 4) {
         var index = string.length - 4;
         string = string.slice(0, index) + 'g ' + string.slice(index);
     }
-    if (string.length > 3) {
+    if (string.length > 2) {
         var index = string.length - 2;
         string = string.slice(0, index) + 's ' + string.slice(index);
     }
