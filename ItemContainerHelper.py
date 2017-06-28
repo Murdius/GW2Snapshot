@@ -22,6 +22,11 @@ class ItemContainerHelper:
         models.db.session.commit()
 
     @staticmethod
+    def get(item_id):
+        current_item_container = ItemContainer.query.filter_by(id=item_id).first()
+        return current_item_container
+
+    @staticmethod
     def delete(item_id):
         current_item_container = ItemContainer.query.filter_by(id=item_id).first()
         models.db.session.delete(current_item_container)
