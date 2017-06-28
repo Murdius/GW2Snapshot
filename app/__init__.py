@@ -16,3 +16,4 @@ db = SQLAlchemy(app)
 from app import views
 from app import walletView
 from app import itemView
+from app import itemContainerView
