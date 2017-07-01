@@ -29,7 +29,7 @@ class WalletRest(Resource):
         p = ThreadPool(processes=5)
         p.map(add_name_to_currency, wallet_delta_list)
         p.close()
-        p.terminate()
+        p.join()
         models.db.session.close()
         return jsonify(wallet_data=wallet_delta_list)
 
