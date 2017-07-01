@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import {changeApiKey} from '../actions'
-import InputField from '../components/inputField.js'
+import InputField from '../components/inputField.jsx'
 
 const mapStateToProps = (state, ownProps) => ({apiKey: state.apiKey})
 
