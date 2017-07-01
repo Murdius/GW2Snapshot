@@ -26,7 +26,7 @@ class WalletRest(Resource):
         for currency in wallet_delta_list:
             currency['count'] = currency.pop('value')
         print "Removed zero count"
-        p = ThreadPool(processes=20)
+        p = ThreadPool(processes=5)
         p.map(add_name_to_currency, wallet_delta_list)
         p.close()
         p.terminate()

@@ -45,7 +45,6 @@ class ItemRest(Resource):
         materials_delta_list = remove_zero_count(materials_delta_list)
         print "Removed zero count"
         condensed_list = inventory_delta_list + shared_delta_list + bank_delta_list + materials_delta_list
-        p = ThreadPool(processes=20)
         p.map(add_name_to_item, condensed_list)
         p.map(add_unit_price_to_item, condensed_list)
         p.close()
