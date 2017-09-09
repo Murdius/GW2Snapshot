@@ -18,7 +18,7 @@ class ItemRest(Resource):
     def get(self, api_key):
         key = {'access_token': api_key}
         encoded_key = urllib.urlencode(key)
-        p = ThreadPool(processes=15)
+        p = ThreadPool(processes=5)
         new_inventory_json_response = p.apply_async(get_all_inventory, [encoded_key])
         new_shared_json_response = p.apply_async(get_shared_inventory, [encoded_key])
         new_bank_json_response = p.apply_async(get_bank, [encoded_key])
@@ -45,15 +45,14 @@ class ItemRest(Resource):
         materials_delta_list = remove_zero_count(materials_delta_list)
         print "Removed zero count"
         condensed_list = inventory_delta_list + shared_delta_list + bank_delta_list + materials_delta_list
-        p.map(add_name_to_item, condensed_list)
-        p.map(add_unit_price_to_item, condensed_list)
-        p.close()
-        p.join()
-        print "Item name retrieved"
         condensed_list2 = copy.deepcopy(condensed_list)
         condensed_list2 = compress_list(condensed_list2)
         condensed_list2 = remove_zero_count(condensed_list2)
         print "Removed zero count from condensed list"
+        p.map(add_unit_price_to_item, condensed_list2)
+        p.close()
+        p.join()
+        print "Item prices retrieved"
         models.db.session.close()
         return jsonify(item_data=condensed_list2)
 
