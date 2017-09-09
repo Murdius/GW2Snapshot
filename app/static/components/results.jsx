@@ -20,14 +20,14 @@ const Results = ({walletData, itemData, results, totalItemValue}) => {
             {walletData.items.wallet_data
                 ? <div>
                         <p>Currency gained/lost</p>
-                        <ResultsTable cols={item_cols} data={walletData.items.wallet_data}/>
+                        <ResultsTable type='wallet' cols={item_cols} data={walletData.items.wallet_data}/>
                     </div>
                 : null
 }
             {itemData.items.item_data
                 ? <div>
                         <p>Items gained/lost</p>
-                        <ResultsTable cols={item_cols} data={itemData.items.item_data}/></div>
+                        <ResultsTable type='item' cols={item_cols} data={itemData.items.item_data}/></div>
                 : null}
             <p>Total Item Value: {totalItemValue}</p>
         </div>
