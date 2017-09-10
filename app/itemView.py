@@ -18,7 +18,7 @@ class ItemRest(Resource):
     def get(self, api_key):
         key = {'access_token': api_key}
         encoded_key = urllib.urlencode(key)
-        p = ThreadPool(processes=5)
+        p = ThreadPool(processes=15)
         new_inventory_json_response = p.apply_async(get_all_inventory, [encoded_key])
         new_shared_json_response = p.apply_async(get_shared_inventory, [encoded_key])
         new_bank_json_response = p.apply_async(get_bank, [encoded_key])
