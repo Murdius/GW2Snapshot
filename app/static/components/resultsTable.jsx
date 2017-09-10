@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
-import Gw2ArmoryItems from './Gw2Armoryitems.jsx';
+import Gw2ArmoryItems from './Gw2ArmoryItems.jsx';
 
 class ResultsTable extends React.Component {
     constructor(props) {
