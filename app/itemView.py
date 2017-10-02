@@ -23,6 +23,8 @@ class ItemRest(Resource):
         new_shared_json_response = p.apply_async(get_shared_inventory, [encoded_key])
         new_bank_json_response = p.apply_async(get_bank, [encoded_key])
         new_materials_json_response = p.apply_async(get_materials, [encoded_key])
+        p.close()
+        p.join()
         snapshot = models.Snapshot.query.filter_by(api_key=api_key).first_or_404()
         old_inventory_json = snapshot.inventory
         old_materials_json = snapshot.materials
@@ -49,9 +51,7 @@ class ItemRest(Resource):
         condensed_list2 = compress_list(condensed_list2)
         condensed_list2 = remove_zero_count(condensed_list2)
         print "Removed zero count from condensed list"
-        p.map(add_unit_price_to_item, condensed_list2)
-        p.close()
-        p.join()
+        add_unit_prices_to_item(condensed_list2)
         print "Item prices retrieved"
         models.db.session.close()
         return jsonify(item_data=condensed_list2)
