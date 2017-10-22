@@ -7,7 +7,7 @@ class Gw2ArmoryItems extends React.Component {
 
   componentDidMount () {
     const script = document.createElement('script');
-    script.src = 'https://gw2armory.com/gw2aEmbeds.js';
+    script.src = 'https://unpkg.com/armory-embeds@^0.x.x/armory-embeds.js';
     document.body.appendChild(script);
   }
 
